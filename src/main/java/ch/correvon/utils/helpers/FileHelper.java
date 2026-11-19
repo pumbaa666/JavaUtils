@@ -16,49 +16,48 @@ public class FileHelper
 			append = "";
 		return StringHelper.convertListToString(readFile(filePath), append);
 	}
-	
+
 	public static ArrayList<String> readFile(String filePath)
 	{
 		ArrayList<String> result = new ArrayList<String>(500);
-	    BufferedReader bufferReader = null;
-	    String line;
+		BufferedReader bufferReader = null;
+		String line;
 
-	    try
-	    {
-	    	bufferReader = new BufferedReader(new FileReader(filePath)); 
-		    while((line = bufferReader.readLine()) != null)
-		    	result.add(line);
-		    bufferReader.close();
+		try
+		{
+			bufferReader = new BufferedReader(new FileReader(filePath));
+			while((line = bufferReader.readLine()) != null)
+				result.add(line);
+			bufferReader.close();
 		}
-	    catch(FileNotFoundException exc)
-	    {
-	    }
-	    catch(IOException e)
-	    {
-	    }
+		catch(FileNotFoundException exc)
+		{
+		}
+		catch(IOException e)
+		{
+		}
 
 		return result;
 	}
 
-	
 	public static boolean writeFile(String fileName, String text)
 	{
 		if(text == null || text.isEmpty())
 			return true;
-		File logFile = new File(fileName);
-//		if(!logFile.isFile())
-//			return false;
-		
-		logFile.getParentFile().mkdir();
+		File file = new File(fileName);
+		//		if(!logFile.isFile())
+		//			return false;
+
 		try
 		{
-			FileWriter fileWriter = new FileWriter(logFile);
+			file.getParentFile().mkdir();
+			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(text);
 			fileWriter.close();
 		}
-		catch (IOException e1)
+		catch(IOException e)
 		{
-			System.err.println("Impossible d'�crire dans le fichier "+logFile.getAbsolutePath());
+			System.err.println("Impossible d'écrire dans le fichier " + file.getAbsolutePath());
 			return false;
 		}
 

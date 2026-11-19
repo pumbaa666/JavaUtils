@@ -136,7 +136,7 @@ public class TagHelper
 			}
 			try
 			{
-				new Integer(splited[0]); // test uniquement si la date est num�rique, mais garde le string au cas o� elle commencerait par des '0'
+				new Integer(splited[0]); // test uniquement si la date est numérique, mais garde le string au cas où elle commencerait par des '0'
 			}
 			catch(NumberFormatException e)
 			{
@@ -186,7 +186,7 @@ public class TagHelper
 			}
 			try
 			{
-				new Integer(splited[0]); // test uniquement si le num�ro de piste est num�rique, mais garde le string au cas o� il commencerait par des '0'
+				new Integer(splited[0]); // test uniquement si le numéro de piste est numérique, mais garde le string au cas où il commencerait par des '0'
 			}
 			catch(NumberFormatException e)
 			{

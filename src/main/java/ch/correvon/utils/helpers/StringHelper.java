@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class StringHelper
 {
 
 	/**
 	 * Make a string to pad filename with same number of character
+	 * 
 	 * @param character to fill string
 	 * @param nbChar number of wanted characters
 	 * @param currentNumber value of last characters
@@ -18,11 +18,12 @@ public class StringHelper
 	 */
 	public static String getPadding(String character, int nbChar, int currentNumber)
 	{
-		return getPadding(character, nbChar, ""+currentNumber);
+		return getPadding(character, nbChar, "" + currentNumber);
 	}
 
 	/**
 	 * Make a string to pad filename with same number of character
+	 * 
 	 * @param character to fill string
 	 * @param nbChar number of wanted characters
 	 * @param currentNumber value of last characters
@@ -40,6 +41,7 @@ public class StringHelper
 
 	/**
 	 * Find the extension of a filename
+	 * 
 	 * @param fileName
 	 * @return the extension (without dot). If no extension is found, return empty String
 	 */
@@ -47,9 +49,10 @@ public class StringHelper
 	{
 		return findExtension(fileName, false);
 	}
-	
+
 	/**
 	 * Find the extension of a filename
+	 * 
 	 * @param fileName
 	 * @param addDot If true, return dot + extension
 	 * @return the extension. If no extension is found, return empty String
@@ -59,13 +62,14 @@ public class StringHelper
 		int lastIndex = lastIndexOf(fileName, ".");
 		if(lastIndex == -1)
 			return "";
-		
+
 		fileName = fileName.substring(lastIndex + 1);
-		return (addDot?".":"") + fileName;
+		return (addDot ? "." : "") + fileName;
 	}
-	
+
 	/**
 	 * Return a file name without extension (search the last dot and delete every char after)
+	 * 
 	 * @param fileName
 	 * @return
 	 */
@@ -74,10 +78,10 @@ public class StringHelper
 		int lastDot = lastIndexOf(fileName, ".");
 		if(lastDot == -1)
 			return fileName;
-		
+
 		return fileName.substring(0, lastDot);
 	}
-	
+
 	public static int lastIndexOf(String string, String search)
 	{
 		int index = string.indexOf(search);
@@ -94,9 +98,10 @@ public class StringHelper
 
 		return lastIndex;
 	}
-	
+
 	/**
 	 * Calculate the number of digit needed to pad a filename
+	 * 
 	 * @param nbFiles
 	 * @param increment
 	 * @param startCount
@@ -106,18 +111,20 @@ public class StringHelper
 	{
 		return (int)Math.log10((nbFiles - 1) * increment + startCount);
 	}
-	
+
 	/**
 	 * Generate a file name with the current date. yyyy-MM-dd_hh-mm-ss_[RANDOM_NUMBER*5].log
+	 * 
 	 * @return
 	 */
 	public static String generateLogFileName()
 	{
 		return generateLogFileName("", "", ".log");
 	}
-	
+
 	/**
 	 * Generate a file name with the current date. [PREFIX]yyyy-MM-dd_hh-mm-ss_[RANDOM_NUMBER*5][SUFFIX].[EXTENSION]
+	 * 
 	 * @return
 	 */
 	public static String generateLogFileName(String prefix, String suffix, String extension)
@@ -125,9 +132,10 @@ public class StringHelper
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
 		return prefix + formatter.format(new Date()) + "_" + generateRandomString(5, "0123456789".toCharArray()) + suffix + extension;
 	}
-	
+
 	/**
 	 * Generate a random String containing lowercase letters
+	 * 
 	 * @param nbChar Number of chars in the String
 	 * @return the random String
 	 */
@@ -136,9 +144,10 @@ public class StringHelper
 		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 		return(generateRandomString(nbChar, chars));
 	}
-	
+
 	/**
 	 * Generate a random String
+	 * 
 	 * @param nbChar Number of chars in the String
 	 * @param authorizedChar array of char the String can contain
 	 * @return the random String
@@ -147,17 +156,18 @@ public class StringHelper
 	{
 		String result = "";
 		int rnd;
-		int nbAuthorizedChar = authorizedChar.length-1;
+		int nbAuthorizedChar = authorizedChar.length - 1;
 		for(int i = 0; i < nbChar; i++)
 		{
 			rnd = (int)(Math.random() * nbAuthorizedChar);
-			result += ""+authorizedChar[rnd];
+			result += "" + authorizedChar[rnd];
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Convert a Date to a String with default date format "dd.MM.yyyy"
+	 * 
 	 * @param date
 	 * @return the date
 	 */
@@ -165,9 +175,10 @@ public class StringHelper
 	{
 		return convertDateToString(date, "dd.MM.yyyy");
 	}
-	
+
 	/**
 	 * Convert a Date to a String.
+	 * 
 	 * @param date
 	 * @param dateFormat
 	 * @return the date
@@ -186,9 +197,10 @@ public class StringHelper
 	{
 		return str == null || str.equals("");
 	}
-	
+
 	/**
 	 * Build a String from a list
+	 * 
 	 * @param list
 	 * @param append : append to each elements of list
 	 * @return
@@ -201,9 +213,54 @@ public class StringHelper
 			append = "";
 		StringBuilder infos = new StringBuilder(10000);
 		for(String info:list)
-			infos.append(info+append);
+			infos.append(info + append);
 		return infos.toString();
 	}
-	
 
+	/**
+	 * Replace some char to comply with file system.
+	 * 
+	 * @param input The String to find and replace
+	 * @return The String modified
+	 */
+	public static String formatForFile(String input)
+	{
+		String output = input;
+
+		int nbCorrespondance = charCorrespondance.length;
+		for(int i = 0; i < nbCorrespondance; i++)
+			output = output.replace(charCorrespondance[i].getStringRepresentation(), charCorrespondance[i].getFileRepresentation());
+
+		return output;
+	}
+
+	/**
+	 * Test si le nom de fichier est valide, donc si il ne contient pas de caractère interdits.
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static boolean isFileNameValid(String fileName)
+	{
+		for(CharCorrespondance deprecatedChar:DEPRECATED_CHARS)
+			if(fileName.contains("" + deprecatedChar.getFileRepresentation()))
+				return false;
+		return true;
+	}
+
+	public static String getDeprecatedChar()
+	{
+		StringBuilder stringBuilder = new StringBuilder(DEPRECATED_CHARS.length);
+
+		for(CharCorrespondance deprecatedChar:DEPRECATED_CHARS)
+			stringBuilder.append(deprecatedChar.getStringRepresentation() + " ");
+
+		return stringBuilder.toString();
+	}
+
+	public static final CharCorrespondance[] DEPRECATED_CHARS = { new CharCorrespondance("/", '/'), new CharCorrespondance("\\", '\\'), new CharCorrespondance(":", ':'), new CharCorrespondance("*", '*'), new CharCorrespondance("?", '?'),
+			new CharCorrespondance("\"", '"'), new CharCorrespondance("<", '<'), new CharCorrespondance(">", '>'), new CharCorrespondance("|", '|'), new CharCorrespondance("\\0", '\0'), new CharCorrespondance("\\n", '\n'),
+			new CharCorrespondance("\\t", '\t') };
+
+	private static final CharCorrespondance[] charCorrespondance = { new CharCorrespondance("\n", "\r\n"), new CharCorrespondance("\t", "" + (char)9) };
 }
